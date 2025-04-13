@@ -135,7 +135,7 @@ exports.landToDashboard = async (req, res) => {
         }
 
         // Generate a new token if needed
-        const tokenExpiry = '10m';
+        const tokenExpiry = '1h';
         const tokennew = generateToken(user, tokenExpiry);
 
         //console.log("token fromLandToDashboard " + tokennew);
