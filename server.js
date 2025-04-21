@@ -22,7 +22,7 @@ app.use('/api', saleRoute);
 app.use('/api', spendDataRoutes);
 
 
-sequelize.sync({alter: true}).then(() => {
+sequelize.sync().then(() => {
 
     console.log('Database synced');
 
