@@ -1,7 +1,7 @@
 const Transactions = require('../models/transactions');
 const Sales = require('../models/sales');
 const SpendData = require('../models/spenddata');
-const { Op } = require('sequelize');
+const { Op, fn, col, literal } = require('sequelize');
 
 exports.getAllTransactions = async(req , res) => {
     try {
@@ -96,4 +96,53 @@ try{
 }
 
 
+};
+
+// Helper to get current week of the month
+
+function getWeekOfMonth(date) {
+
+  const day = date.getDate();
+  return Math.ceil(day / 7); // Week 1: 1-7, Week 2: 8-14, etc.
+}
+
+
+exports.getSalesSummary = async (req, res) => {
+  try {
+
+    const { userId } = req.query;
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentWeek = getWeekOfMonth(today);
+
+    const monthAcronyms = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    const currentMonth = monthAcronyms[today.getMonth()]; // "APR"
+
+    const totalSell = await Sales.sum('sales_amount');
+
+    const thisMonthSell = await Sales.sum('sales_amount', {
+      where: {
+        month_name: currentMonth,
+        year: currentYear,
+      },
+    });
+
+    const currentWeekSell = await Sales.sum('sales_amount', {
+      where: {
+        week_number: currentWeek,
+        month_name: currentMonth,
+        year: currentYear,
+      },
+    });
+
+    res.json({
+      totalSell: totalSell || 0,
+      thisMonthSell: thisMonthSell || 0,
+      currentWeekSell: currentWeekSell || 0,
+    });
+
+  } catch (error) {
+    console.error('Error fetching sales summary:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 };

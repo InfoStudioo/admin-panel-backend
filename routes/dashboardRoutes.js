@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllTransactions, getAllSalesData , getSpendData} = require('../controllers/dashboardController');
+const { getAllTransactions, getAllSalesData , getSpendData, getSalesSummary} = require('../controllers/dashboardController');
 const { authenticateUser } = require('../middleware/authMiddleware');
 
 
@@ -13,6 +13,8 @@ router.get('/get_sales_data', authenticateUser, getAllSalesData);
 
 
 router.get('/get_spend_data', authenticateUser, getSpendData);
+
+router.get('/get_sales_summary', authenticateUser, getSalesSummary);
 
 
 module.exports = router;
