@@ -7,6 +7,7 @@ const transactionRoutes = require('./routes/transactionRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const saleRoute = require('./routes/saleRoute');
 const spendDataRoutes = require('./routes/spendDataRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 
 const app = express();
@@ -20,6 +21,8 @@ app.use('/api', transactionRoutes);
 app.use('/api',dashboardRoutes);
 app.use('/api', saleRoute);
 app.use('/api', spendDataRoutes);
+app.use('/api',adminRoutes);
+
 
 
 sequelize.sync().then(() => {
